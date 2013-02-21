@@ -93,7 +93,13 @@ namespace VB6ImageCreator
             return;
          }
 
+         Cursor = Cursors.Wait;
+         IsEnabled = false;
          ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
+         Cursor = Cursors.Arrow;
+         IsEnabled = true;
+
+         MessageBox.Show("Converted " + ImageConverter.CountConverted.ToString() + " images.");
       }
 
       private void BtnSelSource_Click(object sender, RoutedEventArgs e)

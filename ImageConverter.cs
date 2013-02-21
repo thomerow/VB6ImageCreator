@@ -8,6 +8,7 @@ using System.Reflection;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading;
 
 namespace VB6ImageCreator
 {
@@ -16,11 +17,25 @@ namespace VB6ImageCreator
       static int _trnspThresh;
       static System.Windows.Media.Color _colBack, _colTrnsp;
 
+      static ImageConverter()
+      {
+         CountConverted = 0;
+      }
+
+      public static int CountConverted { get; private set; }
+
+      internal static void ConvertAsync(int trnspThresh, System.Windows.Media.Color colBack, System.Windows.Media.Color colTrnsp, string dirSource, string dirDest)
+      {
+         ThreadPool.QueueUserWorkItem(p => Convert(trnspThresh, colBack, colTrnsp, dirSource, dirDest));
+      }
+
       internal static void Convert(int trnspThresh, System.Windows.Media.Color colBack, System.Windows.Media.Color colTrnsp, string dirSource, string dirDest)
       {
          _trnspThresh = trnspThresh;
          _colTrnsp = colTrnsp;
          _colBack = colBack;
+
+         CountConverted = 0;
 
          if (dirDest.EndsWith("\\")) dirDest = dirDest.Substring(0, dirDest.Length - 1);
 
@@ -42,6 +57,8 @@ namespace VB6ImageCreator
             var imgDest = Convert(img);
             imgDest.Save(imgPathDest, System.Drawing.Imaging.ImageFormat.Bmp);
          }
+
+         CountConverted = sourceImages.Count;
       }
 
       private static Image Convert(Image img)
