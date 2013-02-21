@@ -50,19 +50,42 @@ namespace VB6ImageCreator
          int nWidth = img.Width;
          int nHeight = img.Height;
 
+         var colTrnsp = FromWindowsMediaColor(_colTrnsp);
+         var colBack = FromWindowsMediaColor(_colBack);
+
          for (int j = 0; j < nHeight; ++j)
          {
             for (int i = 0; i < nWidth; ++i)
             {
                System.Drawing.Color c = bmpSrc.GetPixel(i, j);
+               double alpha = (double) c.A / 0xFF;
+               if ((1.0 - alpha) >= ((double) _trnspThresh / 100)) c = colTrnsp;
+               else
+               {
+                  c = System.Drawing.Color.FromArgb(
+                     0xFF,
+                     BlendChannels(alpha, c.R, colBack.R),
+                     BlendChannels(alpha, c.G, colBack.G),
+                     BlendChannels(alpha, c.B, colBack.B)
+                  );
 
-               // ToDo: implement
+               }
 
-               // bmpSrc.SetPixel(i, j, System.Drawing.Color.FromArgb(0xFF, 0xFF, 0, 0xFF));
+               bmpSrc.SetPixel(i, j, c);
             }
          }
 
          return bmpSrc;
+      }
+
+      private static byte BlendChannels(double alpha, byte chnFore, byte chnBack)
+      {
+         return (byte) Math.Round((alpha * chnFore) + ((1.0 - alpha) * chnBack));
+      }
+
+      private static System.Drawing.Color FromWindowsMediaColor(System.Windows.Media.Color color)
+      {
+         return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
       }
    }
 }
