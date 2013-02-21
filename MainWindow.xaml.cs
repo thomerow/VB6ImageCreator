@@ -11,6 +11,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System.Reflection;
+using Microsoft.Win32;
+using System.Windows.Interop;
 
 namespace VB6ImageCreator
 {
@@ -19,96 +23,87 @@ namespace VB6ImageCreator
    /// </summary>
    public partial class MainWindow : Window
    {
+      int _trnspThresh = 50;
+      Color _colBack, _colTrnsp;
+
       public MainWindow()
       {
          InitializeComponent();
       }
 
-      private void SliderRed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+      private void Window_Loaded(object sender, RoutedEventArgs e)
       {
-         // Green rectangle
-         var lgb = _rectGreen.Fill as LinearGradientBrush;
-         if (lgb == null) return;
-
-         var stop0 = lgb.GradientStops[0];
-         var stop1 = lgb.GradientStops[1];
-
-         stop0.Color = new Color { A = 0xFF, R = (byte) e.NewValue, G = stop0.Color.G, B = stop0.Color.B };
-         stop1.Color = new Color { A = 0xFF, R = (byte) e.NewValue, G = stop1.Color.G, B = stop1.Color.B };
-
-         // Blue rectangle
-         lgb = _rectBlue.Fill as LinearGradientBrush;
-         if (lgb == null) return;
-
-         stop0 = lgb.GradientStops[0];
-         stop1 = lgb.GradientStops[1];
-
-         stop0.Color = new Color { A = 0xFF, R = (byte) e.NewValue, G = stop0.Color.G, B = stop0.Color.B };
-         stop1.Color = new Color { A = 0xFF, R = (byte) e.NewValue, G = stop1.Color.G, B = stop1.Color.B };
-
-         _txtRed.Text = ((byte) e.NewValue).ToString();
-
-         UpdateSelectedColorRect();
+         SetBackgroudColorRectBrush();
+         SetTransparentColorRectBrush();
+         _lblPercent.Content = ((int)Math.Round(_sldTrnspThresh.Value)).ToString();
       }
 
-      private void SliderGreen_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+      private void SetBackgroudColorRectBrush()
       {
-         // Red rectangle
-         var lgb = _rectRed.Fill as LinearGradientBrush;
-         if (lgb == null) return;
+         if (_rectColBack == null) return;
 
-         var stop0 = lgb.GradientStops[0];
-         var stop1 = lgb.GradientStops[1];
-
-         stop0.Color = new Color { A = 0xFF, R = stop0.Color.R, G = (byte) e.NewValue, B = stop0.Color.B };
-         stop1.Color = new Color { A = 0xFF, R = stop1.Color.R, G = (byte) e.NewValue, B = stop1.Color.B };
-
-         // Blue rectangle
-         lgb = _rectBlue.Fill as LinearGradientBrush;
-         if (lgb == null) return;
-
-         stop0 = lgb.GradientStops[0];
-         stop1 = lgb.GradientStops[1];
-
-         stop0.Color = new Color { A = 0xFF, R = stop0.Color.R, G = (byte) e.NewValue, B = stop0.Color.B };
-         stop1.Color = new Color { A = 0xFF, R = stop1.Color.R, G = (byte) e.NewValue, B = stop1.Color.B };
-
-         _txtGreen.Text = ((byte) e.NewValue).ToString();
-
-         UpdateSelectedColorRect();
+         FillRect(_rectColBack, _txtColBck.Text);
+         _colBack = ((SolidColorBrush) _rectColBack.Fill).Color;
       }
 
-      private void SliderBlue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+      private void SetTransparentColorRectBrush()
       {
-         // Red rectangle
-         var lgb = _rectRed.Fill as LinearGradientBrush;
-         if (lgb == null) return;
+         if (_rectColTransp == null) return;
 
-         var stop0 = lgb.GradientStops[0];
-         var stop1 = lgb.GradientStops[1];
-
-         stop0.Color = new Color { A = 0xFF, R = stop0.Color.R, G = stop0.Color.G, B = (byte) e.NewValue };
-         stop1.Color = new Color { A = 0xFF, R = stop1.Color.R, G = stop1.Color.G, B = (byte) e.NewValue };
-
-         // Green rectangle
-         lgb = _rectGreen.Fill as LinearGradientBrush;
-         if (lgb == null) return;
-
-         stop0 = lgb.GradientStops[0];
-         stop1 = lgb.GradientStops[1];
-
-         stop0.Color = new Color { A = 0xFF, R = stop0.Color.R, G = stop0.Color.G, B = (byte) e.NewValue };
-         stop1.Color = new Color { A = 0xFF, R = stop1.Color.R, G = stop1.Color.G, B = (byte) e.NewValue };
-
-         _txtBlue.Text = ((byte) e.NewValue).ToString();
-
-         UpdateSelectedColorRect();
+         FillRect(_rectColTransp, _txtColTrnsp.Text);
+         _colTrnsp = ((SolidColorBrush) _rectColTransp.Fill).Color;
       }
 
-      private void UpdateSelectedColorRect()
+      private void FillRect(Rectangle rect, string colHex)
       {
-         _rectColor.Fill 
-            = new SolidColorBrush(new Color { A = 0xFF, R = (byte) _sliderRed.Value, G = (byte) _sliderGreen.Value, B = (byte) _sliderBlue.Value });
+         try
+         {
+            rect.Fill = (SolidColorBrush) (new BrushConverter().ConvertFromString(colHex));
+         }
+         catch { }
+      }
+
+      private void TxtColBck_TextChanged(object sender, TextChangedEventArgs e)
+      {
+         SetBackgroudColorRectBrush();
+      }
+
+      private void TxtColTrnsp_TextChanged(object sender, TextChangedEventArgs e)
+      {
+         SetTransparentColorRectBrush();
+      }
+
+      private void SldTrnspThresh_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+      {
+         if (_lblPercent == null) return;
+         _trnspThresh = ((int) Math.Round(e.NewValue));
+         _lblPercent.Content = _trnspThresh.ToString();
+      }
+
+      private void BtnConvert_Click(object sender, RoutedEventArgs e)
+      {
+         Convert();
+      }
+
+      private void Convert()
+      {
+         if ((_txtSource.Text == string.Empty) || (_txtDest.Text == string.Empty))
+         {
+            MessageBox.Show("Select a source and a target directory first.");
+            return;
+         }
+
+         ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
+      }
+
+      private void BtnSelSource_Click(object sender, RoutedEventArgs e)
+      {
+         _txtSource.Text = FolderBrowserDialog.SelectFolder("Select Source Directory", "", new WindowInteropHelper(this).Handle);
+      }
+
+      private void BtnSelTgt_Click(object sender, RoutedEventArgs e)
+      {
+         _txtDest.Text = FolderBrowserDialog.SelectFolder("Select Target Directory", "", new WindowInteropHelper(this).Handle);
       }
    }
 }
