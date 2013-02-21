@@ -74,8 +74,10 @@ namespace VB6ImageCreator
          {
             for (int i = 0; i < nWidth; ++i)
             {
-               System.Drawing.Color c = bmpSrc.GetPixel(i, j);
+               var c = bmpSrc.GetPixel(i, j);
                double alpha = (double) c.A / 0xFF;
+
+               // Calculate new pixel color
                if ((1.0 - alpha) >= ((double) _trnspThresh / 100)) c = colTrnsp;
                else
                {
@@ -85,9 +87,9 @@ namespace VB6ImageCreator
                      BlendChannels(alpha, c.G, colBack.G),
                      BlendChannels(alpha, c.B, colBack.B)
                   );
-
                }
 
+               // Replace pixel color
                bmpSrc.SetPixel(i, j, c);
             }
          }
@@ -95,9 +97,16 @@ namespace VB6ImageCreator
          return bmpSrc;
       }
 
-      private static byte BlendChannels(double alpha, byte chnFore, byte chnBack)
+      /// <summary>
+      /// Blends a foreground and a background color channel.
+      /// </summary>
+      /// <param name="alpha">Alpha value (0.0 - 1.0)</param>
+      /// <param name="chnFG">Foreground color channel value (0 - 255)</param>
+      /// <param name="chnBG">Background channel value (0 - 255)</param>
+      /// <returns>Combined color channel value.</returns>
+      private static byte BlendChannels(double alpha, byte chnFG, byte chnBG)
       {
-         return (byte) Math.Round((alpha * chnFore) + ((1.0 - alpha) * chnBack));
+         return (byte) Math.Round((alpha * chnFG) + ((1.0 - alpha) * chnBG));
       }
 
       private static System.Drawing.Color FromWindowsMediaColor(System.Windows.Media.Color color)
