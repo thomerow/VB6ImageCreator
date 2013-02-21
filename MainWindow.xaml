@@ -9,6 +9,7 @@
     Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
     WindowStartupLocation="CenterScreen"
     Loaded="Window_Loaded"
+    Icon="tx.ico"
     >
     <Grid>
         <Button
