@@ -83,9 +83,9 @@ namespace VB6ImageCreator
                {
                   c = System.Drawing.Color.FromArgb(
                      0xFF,
-                     BlendChannels(alpha, c.R, colBack.R),
-                     BlendChannels(alpha, c.G, colBack.G),
-                     BlendChannels(alpha, c.B, colBack.B)
+                     BlendChannel(alpha, c.R, colBack.R),
+                     BlendChannel(alpha, c.G, colBack.G),
+                     BlendChannel(alpha, c.B, colBack.B)
                   );
                }
 
@@ -98,13 +98,14 @@ namespace VB6ImageCreator
       }
 
       /// <summary>
-      /// Blends a foreground and a background color channel.
+      /// Blends a foreground color and a background color according to a given
+      /// alpha value.
       /// </summary>
       /// <param name="alpha">Alpha value (0.0 - 1.0)</param>
       /// <param name="chnFG">Foreground color channel value (0 - 255)</param>
       /// <param name="chnBG">Background channel value (0 - 255)</param>
       /// <returns>Combined color channel value.</returns>
-      private static byte BlendChannels(double alpha, byte chnFG, byte chnBG)
+      private static byte BlendChannel(double alpha, byte chnFG, byte chnBG)
       {
          return (byte) Math.Round((alpha * chnFG) + ((1.0 - alpha) * chnBG));
       }
