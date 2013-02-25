@@ -98,11 +98,22 @@ namespace VB6ImageCreator
 
          Cursor = Cursors.Wait;
          IsEnabled = false;
-         ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
-         Cursor = Cursors.Arrow;
-         IsEnabled = true;
 
-         MessageBox.Show("Converted " + ImageConverter.CountConverted.ToString() + " images.");
+         try
+         {
+            ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
+            Properties.Settings.Default.Save(); // Remember source and target directories
+            MessageBox.Show("Converted " + ImageConverter.CountConverted.ToString() + " images.");
+         }
+         catch (Exception exc)
+         {
+            MessageBox.Show(exc.Message, "Oops", MessageBoxButton.OK, MessageBoxImage.Error);
+         }
+         finally
+         {
+            Cursor = Cursors.Arrow;
+            IsEnabled = true;
+         }
       }
 
       private void BtnSelSource_Click(object sender, RoutedEventArgs e)
@@ -114,7 +125,6 @@ namespace VB6ImageCreator
          {
             _txtSource.Text = srcDir;
             Properties.Settings.Default.LastSourceDir = srcDir;
-            Properties.Settings.Default.Save();
          }
       }
 
@@ -127,7 +137,6 @@ namespace VB6ImageCreator
          {
             _txtDest.Text = destDir;
             Properties.Settings.Default.LastDestDir = destDir;
-            Properties.Settings.Default.Save();
          }
       }
 
