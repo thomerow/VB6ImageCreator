@@ -62,9 +62,24 @@
             Maximum="100"
             SmallChange="1"
             LargeChange="10"
-            Value="50" 
+            Value="50"
             ValueChanged="SldTrnspThresh_ValueChanged"
-            />
+            >
+            <Slider.ToolTip>
+                <ToolTip>
+                    <StackPanel>
+                        <TextBlock
+                            FontWeight="Bold"
+                            >
+                            Transparency Threshold
+                        </TextBlock>
+                        <TextBlock>
+                            Pixels more transparent than this value are treated as fully transparent.
+                        </TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Slider.ToolTip>
+        </Slider>
         <Label
             Content="T_ransparency Threshold:"
             HorizontalAlignment="Left"
