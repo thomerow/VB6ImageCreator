@@ -95,6 +95,7 @@ namespace VB6ImageCreator
             MessageBox.Show("Select a source and a target directory first.");
             return;
          }
+         Properties.Settings.Default.Save(); // Remember source and target directories
 
          Cursor = Cursors.Wait;
          IsEnabled = false;
@@ -102,7 +103,6 @@ namespace VB6ImageCreator
          try
          {
             ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
-            Properties.Settings.Default.Save(); // Remember source and target directories
             MessageBox.Show("Converted " + ImageConverter.CountConverted.ToString() + " images.");
          }
          catch (Exception exc)
