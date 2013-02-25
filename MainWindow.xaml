@@ -74,7 +74,7 @@
                             Transparency Threshold
                         </TextBlock>
                         <TextBlock>
-                            Pixels more transparent than this value are treated as fully transparent.
+                            Pixels more transparent than this value are considered fully transparent.
                         </TextBlock>
                     </StackPanel>
                 </ToolTip>
