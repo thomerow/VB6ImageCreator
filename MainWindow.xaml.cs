@@ -108,11 +108,12 @@ namespace VB6ImageCreator
       private void BtnSelSource_Click(object sender, RoutedEventArgs e)
       {
          var lastSourceDir = Properties.Settings.Default.LastSourceDir;
+         var srcDir = FolderBrowserDialog.SelectFolder("Select Source Directory", lastSourceDir, new WindowInteropHelper(this).Handle);
 
-         if (_txtSource.Text != string.Empty)
+         if (srcDir != string.Empty)
          {
-            _txtSource.Text = FolderBrowserDialog.SelectFolder("Select Source Directory", lastSourceDir, new WindowInteropHelper(this).Handle);
-            Properties.Settings.Default.LastSourceDir = _txtSource.Text;
+            _txtSource.Text = srcDir;
+            Properties.Settings.Default.LastSourceDir = srcDir;
             Properties.Settings.Default.Save();
          }
       }
@@ -120,11 +121,12 @@ namespace VB6ImageCreator
       private void BtnSelTgt_Click(object sender, RoutedEventArgs e)
       {
          var lastDestDir = Properties.Settings.Default.LastDestDir;
+         var destDir = FolderBrowserDialog.SelectFolder("Select Target Directory", lastDestDir, new WindowInteropHelper(this).Handle);
 
-         if (_txtDest.Text != string.Empty)
+         if (destDir != string.Empty)
          {
-            _txtDest.Text = FolderBrowserDialog.SelectFolder("Select Target Directory", lastDestDir, new WindowInteropHelper(this).Handle);
-            Properties.Settings.Default.LastDestDir = _txtDest.Text;
+            _txtDest.Text = destDir;
+            Properties.Settings.Default.LastDestDir = destDir;
             Properties.Settings.Default.Save();
          }
       }
