@@ -121,7 +121,7 @@ namespace VB6ImageCreator
          var lastSourceDir = Properties.Settings.Default.LastSourceDir;
          var srcDir = FolderBrowserDialog.SelectFolder("Select Source Directory", lastSourceDir, new WindowInteropHelper(this).Handle);
 
-         if (srcDir != string.Empty)
+         if ((srcDir != null) && (srcDir != string.Empty))
          {
             _txtSource.Text = srcDir;
             Properties.Settings.Default.LastSourceDir = srcDir;
@@ -133,7 +133,7 @@ namespace VB6ImageCreator
          var lastDestDir = Properties.Settings.Default.LastDestDir;
          var destDir = FolderBrowserDialog.SelectFolder("Select Target Directory", lastDestDir, new WindowInteropHelper(this).Handle);
 
-         if (destDir != string.Empty)
+         if ((destDir != null) && (destDir != string.Empty))
          {
             _txtDest.Text = destDir;
             Properties.Settings.Default.LastDestDir = destDir;
