@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="VB6 image creator"
     Height="378"
-    Width="521"
+    Width="397"
     ResizeMode="CanMinimize"
     Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
     WindowStartupLocation="CenterScreen"
@@ -14,10 +14,10 @@
     <Grid>
         <Button
             IsDefault="True"
-            Content="Convert"
+            Content="_Convert"
             Height="23"
             HorizontalAlignment="Right"
-            Margin="0,0,12,12"
+            Margin="0,0,93,12"
             Name="_btnConvert"
             VerticalAlignment="Bottom"
             Width="75"
@@ -30,32 +30,32 @@
             IsReadOnly="True"
             VerticalAlignment="Top"/>
         <Button
-            Content="Select Source Directory"
+            Content="Select _Source Directory"
             Height="23"
             HorizontalAlignment="Right"
-            Margin="0,41,12,0"
+            Margin="0,41,15,0"
             Name="_btnSelSource"
             VerticalAlignment="Top"
             Click="BtnSelSource_Click" />
         <TextBox
             Height="23"
             HorizontalAlignment="Stretch"
-            Margin="12,79,12,0"
+            Margin="12,79,15,0"
             Name="_txtDest"
             IsReadOnly="True"
             VerticalAlignment="Top" />
         <Button
-            Content="Select Target Directory"
+            Content="Select _Target Directory"
             Height="23"
             HorizontalAlignment="Right"
-            Margin="0,108,12,0"
+            Margin="0,108,15,0"
             Name="_btnSelTgt"
             VerticalAlignment="Top"
             Click="BtnSelTgt_Click" />
         <Slider
             Height="23"
             HorizontalAlignment="Left"
-            Margin="191,158,0,0"
+            Margin="153,158,0,0"
             Name="_sldTrnspThresh"
             VerticalAlignment="Top"
             Width="180"
@@ -66,21 +66,30 @@
             ValueChanged="SldTrnspThresh_ValueChanged"
             />
         <Label
-            Content="Transparency Threshold:"
+            Content="T_ransparency Threshold:"
             HorizontalAlignment="Left"
             Margin="12,153,0,0"
             Name="label1"
             Height="28"
             VerticalAlignment="Top" />
         <Label
-            Content="Background Color:"
+            Content="_Background Color:"
             Height="28"
             HorizontalAlignment="Left"
             Margin="12,0,0,95"
             Name="label2"
             VerticalAlignment="Bottom" />
+        <TextBox
+            Height="23"
+            HorizontalAlignment="Left"
+            Margin="156,0,0,98"
+            Name="_txtColBck"
+            VerticalAlignment="Bottom"
+            Width="71"
+            Text="#D6D3CE"
+            TextChanged="TxtColBck_TextChanged" />
         <Label
-            Content="Transparent Color:"
+            Content="Tr_ansparent Color:"
             Height="28"
             HorizontalAlignment="Left"
             Margin="12,0,0,47"
@@ -89,17 +98,7 @@
         <TextBox
             Height="23"
             HorizontalAlignment="Left"
-            Margin="191,0,0,98"
-            Name="_txtColBck"
-            VerticalAlignment="Bottom"
-            Width="71"
-            Text="#D6D3CE"
-            TextChanged="TxtColBck_TextChanged"
-            />
-        <TextBox
-            Height="23"
-            HorizontalAlignment="Left"
-            Margin="191,0,0,50"
+            Margin="156,0,0,50"
             Name="_txtColTrnsp"
             VerticalAlignment="Bottom"
             Width="71" 
@@ -108,7 +107,7 @@
             />
         <Rectangle
             HorizontalAlignment="Left"
-            Margin="299,0,0,95"
+            Margin="247,0,0,98"
             Name="_rectColBack"
             Stroke="Black"
             Width="72"
@@ -117,14 +116,14 @@
         <Rectangle
             Height="26"
             HorizontalAlignment="Left"
-            Margin="299,0,0,47"
+            Margin="247,0,0,50"
             Name="_rectColTransp"
             Stroke="Black"
             VerticalAlignment="Bottom"
             Width="72" />
         <Label
             Content="0"
-            Margin="377,153,0,0"
+            Margin="325,153,0,0"
             Name="_lblPercent"
             HorizontalContentAlignment="Right"
             Height="28"
@@ -135,10 +134,19 @@
         <Label
             Content="%"
             Height="28"
-            Margin="405,153,0,0"
+            Margin="352,153,0,0"
             Name="label4"
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
             Width="30" />
+        <Button
+            Content="E_xit"
+            Height="23"
+            HorizontalAlignment="Right"
+            Margin="0,0,12,12"
+            Name="_btnExit"
+            VerticalAlignment="Bottom"
+            Width="75"
+            Click="BtnExit_Click" />
     </Grid>
 </Window>

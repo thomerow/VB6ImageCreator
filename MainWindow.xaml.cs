@@ -36,6 +36,9 @@ namespace VB6ImageCreator
          SetBackgroudColorRectBrush();
          SetTransparentColorRectBrush();
          _lblPercent.Content = ((int)Math.Round(_sldTrnspThresh.Value)).ToString();
+
+         _txtSource.Text = Properties.Settings.Default.LastSourceDir;
+         _txtDest.Text = Properties.Settings.Default.LastDestDir;
       }
 
       private void SetBackgroudColorRectBrush()
@@ -104,12 +107,31 @@ namespace VB6ImageCreator
 
       private void BtnSelSource_Click(object sender, RoutedEventArgs e)
       {
-         _txtSource.Text = FolderBrowserDialog.SelectFolder("Select Source Directory", "", new WindowInteropHelper(this).Handle);
+         var lastSourceDir = Properties.Settings.Default.LastSourceDir;
+
+         if (_txtSource.Text != string.Empty)
+         {
+            _txtSource.Text = FolderBrowserDialog.SelectFolder("Select Source Directory", lastSourceDir, new WindowInteropHelper(this).Handle);
+            Properties.Settings.Default.LastSourceDir = _txtSource.Text;
+            Properties.Settings.Default.Save();
+         }
       }
 
       private void BtnSelTgt_Click(object sender, RoutedEventArgs e)
       {
-         _txtDest.Text = FolderBrowserDialog.SelectFolder("Select Target Directory", "", new WindowInteropHelper(this).Handle);
+         var lastDestDir = Properties.Settings.Default.LastDestDir;
+
+         if (_txtDest.Text != string.Empty)
+         {
+            _txtDest.Text = FolderBrowserDialog.SelectFolder("Select Target Directory", lastDestDir, new WindowInteropHelper(this).Handle);
+            Properties.Settings.Default.LastDestDir = _txtDest.Text;
+            Properties.Settings.Default.Save();
+         }
+      }
+
+      private void BtnExit_Click(object sender, RoutedEventArgs e)
+      {
+         Close();
       }
    }
 }
