@@ -9,6 +9,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace VB6ImageCreator
 {
@@ -42,7 +43,7 @@ namespace VB6ImageCreator
          // Get list of all file paths inside the source directory
          var sourceImages = Directory.EnumerateFiles(dirSource, "*.png", SearchOption.AllDirectories).ToList();
 
-         foreach (var imgPath in sourceImages)
+         Parallel.ForEach(sourceImages, imgPath =>
          {
             string imgDir = Path.GetDirectoryName(imgPath);
             string subDirDest = imgDir.Substring(dirSource.Length);
@@ -56,7 +57,7 @@ namespace VB6ImageCreator
             var img = Image.FromFile(imgPath);
             var imgDest = Convert(img);
             imgDest.Save(imgPathDest, System.Drawing.Imaging.ImageFormat.Bmp);
-         }
+         });
 
          CountConverted = sourceImages.Count;
       }
