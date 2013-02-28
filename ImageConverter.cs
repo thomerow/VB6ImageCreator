@@ -9,9 +9,18 @@ namespace VB6ImageCreator
 {
    static class ImageConverter
    {
+      private static readonly double[] AlphaTable;
+
       static ImageConverter()
       {
          CountConverted = 0;
+
+         // Calculate alpha table
+         AlphaTable = new double[0x100];
+         for (int i = 0; i < 0x100; ++i)
+         {
+            AlphaTable[i] = (double) i / 0xFF;
+         }
       }
 
       public static int CountConverted { get; private set; }
@@ -77,6 +86,16 @@ namespace VB6ImageCreator
          CountConverted = sourceImages.Count;
       }
 
+      /// <summary>
+      /// Converts one image according to the given conversion parameters.
+      /// </summary>
+      /// <remarks>ToDo: Speed this up by accessing the image data directly.
+      /// (see Bitmap.LockBits etc.)</remarks>
+      /// <param name="img">The source image.</param>
+      /// <param name="trnspThresh">Transparency threshold in percent.</param>
+      /// <param name="colBack">Background color.</param>
+      /// <param name="colTrnsp">Transparent color.</param>
+      /// <returns>The converted image.</returns>
       private static Image Convert(
          Image img,
          int trnspThresh,
@@ -85,7 +104,9 @@ namespace VB6ImageCreator
       )
       {
          Color c;
+         double alpha;
 
+         double dblTrnspThresh = (double) trnspThresh / 100;
          var bmpSrc = new Bitmap(img);
          int nWidth = img.Width;
          int nHeight = img.Height;
@@ -95,10 +116,10 @@ namespace VB6ImageCreator
             for (int i = 0; i < nWidth; ++i)
             {
                c = bmpSrc.GetPixel(i, j);
-               double alpha = (double) c.A / 0xFF;
+               alpha = AlphaTable[c.A];
 
                // Calculate new pixel color
-               if ((1.0 - alpha) >= ((double) trnspThresh / 100)) c = colTrnsp;
+               if ((1.0 - alpha) >= dblTrnspThresh) c = colTrnsp;
                else
                {
                   c = System.Drawing.Color.FromArgb(
