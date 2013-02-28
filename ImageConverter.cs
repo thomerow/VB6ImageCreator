@@ -107,7 +107,7 @@ namespace VB6ImageCreator
          double alpha;
 
          double dblTrnspThresh = (double) trnspThresh / 100;
-         var bmpSrc = new Bitmap(img);
+         var bmp = new Bitmap(img);
          int nWidth = img.Width;
          int nHeight = img.Height;
 
@@ -115,7 +115,7 @@ namespace VB6ImageCreator
          {
             for (int i = 0; i < nWidth; ++i)
             {
-               c = bmpSrc.GetPixel(i, j);
+               c = bmp.GetPixel(i, j);
                alpha = AlphaTable[c.A];
 
                // Calculate new pixel color
@@ -131,11 +131,11 @@ namespace VB6ImageCreator
                }
 
                // Replace pixel color
-               bmpSrc.SetPixel(i, j, c);
+               bmp.SetPixel(i, j, c);
             }
          }
 
-         return bmpSrc;
+         return bmp;
       }
 
       /// <summary>
