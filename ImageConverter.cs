@@ -16,7 +16,13 @@ namespace VB6ImageCreator
 
       public static int CountConverted { get; private set; }
 
-      internal static void ConvertAsync(int trnspThresh, System.Windows.Media.Color colBack, System.Windows.Media.Color colTrnsp, string dirSource, string dirDest)
+      internal static void ConvertAsync(
+         int trnspThresh, 
+         System.Windows.Media.Color colBack, 
+         System.Windows.Media.Color colTrnsp, 
+         string dirSource, 
+         string dirDest
+      )
       {
          ThreadPool.QueueUserWorkItem(p => Convert(trnspThresh, colBack, colTrnsp, dirSource, dirDest));
       }
@@ -32,7 +38,13 @@ namespace VB6ImageCreator
       /// <param name="colTrnsp">Color of fully transparent pixels.</param>
       /// <param name="dirSource">Source directory.</param>
       /// <param name="dirDest">Destination directory.</param>
-      internal static void Convert(int trnspThresh, System.Windows.Media.Color colBack, System.Windows.Media.Color colTrnsp, string dirSource, string dirDest)
+      internal static void Convert(
+         int trnspThresh, 
+         System.Windows.Media.Color colBack, 
+         System.Windows.Media.Color colTrnsp, 
+         string dirSource, 
+         string dirDest
+      )
       {
          CountConverted = 0;
 
