@@ -21,14 +21,16 @@
             Name="_btnConvert"
             VerticalAlignment="Bottom"
             Width="75"
-            Click="BtnConvert_Click" />
+            Click="BtnConvert_Click" 
+            />
         <TextBox
             Height="23"
             HorizontalAlignment="Stretch"
             Margin="12,12,12,0"
             Name="_txtSource"
             IsReadOnly="True"
-            VerticalAlignment="Top"/>
+            VerticalAlignment="Top"
+            />
         <Button
             Content="Select _Source Directory"
             Height="23"
@@ -36,14 +38,16 @@
             Margin="0,41,15,0"
             Name="_btnSelSource"
             VerticalAlignment="Top"
-            Click="BtnSelSource_Click" />
+            Click="BtnSelSource_Click" 
+            />
         <TextBox
             Height="23"
             HorizontalAlignment="Stretch"
             Margin="12,79,15,0"
             Name="_txtDest"
             IsReadOnly="True"
-            VerticalAlignment="Top" />
+            VerticalAlignment="Top" 
+            />
         <Button
             Content="Select _Target Directory"
             Height="23"
@@ -51,7 +55,8 @@
             Margin="0,108,15,0"
             Name="_btnSelTgt"
             VerticalAlignment="Top"
-            Click="BtnSelTgt_Click" />
+            Click="BtnSelTgt_Click" 
+            />
         <Slider
             Height="23"
             HorizontalAlignment="Left"
@@ -68,12 +73,8 @@
             <Slider.ToolTip>
                 <ToolTip>
                     <StackPanel>
-                        <TextBlock
-                            FontWeight="Bold"
-                            >
-                            Transparency Threshold
-                        </TextBlock>
                         <TextBlock>
+                            <Bold>Transparency Threshold</Bold><LineBreak />
                             Pixels more transparent than this value are considered fully transparent.
                         </TextBlock>
                     </StackPanel>
@@ -86,14 +87,16 @@
             Margin="12,153,0,0"
             Name="label1"
             Height="28"
-            VerticalAlignment="Top" />
+            VerticalAlignment="Top" 
+            />
         <Label
             Content="_Background Color:"
             Height="28"
             HorizontalAlignment="Left"
             Margin="12,0,0,95"
             Name="label2"
-            VerticalAlignment="Bottom" />
+            VerticalAlignment="Bottom" 
+            />
         <TextBox
             Height="23"
             HorizontalAlignment="Left"
@@ -102,14 +105,16 @@
             VerticalAlignment="Bottom"
             Width="71"
             Text="#D6D3CE"
-            TextChanged="TxtColBck_TextChanged" />
+            TextChanged="TxtColBck_TextChanged" 
+            />
         <Label
             Content="Tr_ansparent Color:"
             Height="28"
             HorizontalAlignment="Left"
             Margin="12,0,0,47"
             Name="label3"
-            VerticalAlignment="Bottom" />
+            VerticalAlignment="Bottom" 
+            />
         <TextBox
             Height="23"
             HorizontalAlignment="Left"
@@ -127,7 +132,8 @@
             Stroke="Black"
             Width="72"
             Height="26"
-            VerticalAlignment="Bottom" />
+            VerticalAlignment="Bottom" 
+            />
         <Rectangle
             Height="26"
             HorizontalAlignment="Left"
@@ -135,7 +141,8 @@
             Name="_rectColTransp"
             Stroke="Black"
             VerticalAlignment="Bottom"
-            Width="72" />
+            Width="72" 
+            />
         <Label
             Content="0"
             Margin="325,153,0,0"
@@ -144,8 +151,8 @@
             Height="28"
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
-            Width="36">
-        </Label>
+            Width="36"
+            />
         <Label
             Content="%"
             Height="28"
@@ -153,7 +160,8 @@
             Name="label4"
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
-            Width="30" />
+            Width="30" 
+            />
         <Button
             Content="E_xit"
             Height="23"
@@ -162,6 +170,7 @@
             Name="_btnExit"
             VerticalAlignment="Bottom"
             Width="75"
-            Click="BtnExit_Click" />
+            Click="BtnExit_Click" 
+            />
     </Grid>
 </Window>
