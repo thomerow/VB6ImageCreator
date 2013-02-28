@@ -84,6 +84,8 @@ namespace VB6ImageCreator
          System.Drawing.Color colTrnsp
       )
       {
+         Color c;
+
          var bmpSrc = new Bitmap(img);
          int nWidth = img.Width;
          int nHeight = img.Height;
@@ -92,7 +94,7 @@ namespace VB6ImageCreator
          {
             for (int i = 0; i < nWidth; ++i)
             {
-               var c = bmpSrc.GetPixel(i, j);
+               c = bmpSrc.GetPixel(i, j);
                double alpha = (double) c.A / 0xFF;
 
                // Calculate new pixel color
