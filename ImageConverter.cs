@@ -9,9 +9,6 @@ namespace VB6ImageCreator
 {
    static class ImageConverter
    {
-      static int _trnspThresh;
-      static System.Windows.Media.Color _colBack, _colTrnsp;
-
       static ImageConverter()
       {
          CountConverted = 0;
@@ -24,14 +21,26 @@ namespace VB6ImageCreator
          ThreadPool.QueueUserWorkItem(p => Convert(trnspThresh, colBack, colTrnsp, dirSource, dirDest));
       }
 
+      /// <summary>
+      /// Converts all png images in a source directory to 24 bit bmp images 
+      /// and saves them to a destination directory.
+      /// </summary>
+      /// <param name="trnspThresh">Transparency threshold in percent. Pixels 
+      /// more transparent than this value are considered fully tranparent.</param>
+      /// <param name="colBack">Color to use as a background color when blending 
+      /// semi transparent pixels.</param>
+      /// <param name="colTrnsp">Color of fully transparent pixels.</param>
+      /// <param name="dirSource">Source directory.</param>
+      /// <param name="dirDest">Destination directory.</param>
       internal static void Convert(int trnspThresh, System.Windows.Media.Color colBack, System.Windows.Media.Color colTrnsp, string dirSource, string dirDest)
       {
-         _trnspThresh = trnspThresh;
-         _colTrnsp = colTrnsp;
-         _colBack = colBack;
-
          CountConverted = 0;
 
+         // Convert WPF colors to System.Drawing.Color
+         var sysDrwColBack = FromWindowsMediaColor(colBack);
+         var sysDrwColTrnsp = FromWindowsMediaColor(colTrnsp);
+
+         // Remove rightmost slash from destination directory
          if (dirDest.EndsWith("\\")) dirDest = dirDest.Substring(0, dirDest.Length - 1);
 
          // Get list of all file paths inside the source directory
@@ -49,21 +58,23 @@ namespace VB6ImageCreator
             if (!Directory.Exists(imgDirDest)) Directory.CreateDirectory(imgDirDest);
 
             var img = Image.FromFile(imgPath);
-            var imgDest = Convert(img);
+            var imgDest = Convert(img, trnspThresh, sysDrwColBack, sysDrwColTrnsp);
             imgDest.Save(imgPathDest, System.Drawing.Imaging.ImageFormat.Bmp);
          });
 
          CountConverted = sourceImages.Count;
       }
 
-      private static Image Convert(Image img)
+      private static Image Convert(
+         Image img,
+         int trnspThresh,
+         System.Drawing.Color colBack, 
+         System.Drawing.Color colTrnsp
+      )
       {
          var bmpSrc = new Bitmap(img);
          int nWidth = img.Width;
          int nHeight = img.Height;
-
-         var colTrnsp = FromWindowsMediaColor(_colTrnsp);
-         var colBack = FromWindowsMediaColor(_colBack);
 
          for (int j = 0; j < nHeight; ++j)
          {
@@ -73,7 +84,7 @@ namespace VB6ImageCreator
                double alpha = (double) c.A / 0xFF;
 
                // Calculate new pixel color
-               if ((1.0 - alpha) >= ((double) _trnspThresh / 100)) c = colTrnsp;
+               if ((1.0 - alpha) >= ((double) trnspThresh / 100)) c = colTrnsp;
                else
                {
                   c = System.Drawing.Color.FromArgb(
