@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("VB6ImageCreator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Text Control GmbH")]
+[assembly: AssemblyCompany("Wurstmanufaktur Bremen")]
 [assembly: AssemblyProduct("VB6ImageCreator")]
-[assembly: AssemblyCopyright("Copyright © Text Control GmbH 2013")]
+[assembly: AssemblyCopyright("Copyright © Thorsten Kummerow 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
