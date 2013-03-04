@@ -141,7 +141,7 @@ namespace VB6ImageCreator
                      line[i + 1] = colTrnsp.G;
                      line[i + 2] = colTrnsp.R;
                   }
-                  else
+                  else if (alpha < 1.0)
                   {
                      line[i] = BlendChannel(alpha, line[i], colBack.B);
                      line[i + 1] = BlendChannel(alpha, line[i + 1], colBack.G);
@@ -154,7 +154,7 @@ namespace VB6ImageCreator
                // Write line
                Marshal.Copy(line, 0, ptr, line.Length);
 
-               // Get next line
+               // Go to next line
                ptr = new IntPtr((long) ptr + bmpData.Stride);
             }
          }
