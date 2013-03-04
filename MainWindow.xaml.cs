@@ -93,7 +93,7 @@ namespace VB6ImageCreator
          try
          {
             ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
-            MessageBox.Show("Converted " + ImageConverter.CountConverted.ToString() + " images.");
+            MessageBox.Show(string.Format("Converted {0} images.", ImageConverter.CountConverted.ToString()));
          }
          catch (Exception exc)
          {

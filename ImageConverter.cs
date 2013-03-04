@@ -74,7 +74,7 @@ namespace VB6ImageCreator
             string imgDir = Path.GetDirectoryName(imgPath);
             string subDirDest = imgDir.Substring(dirSource.Length);
             string fileName = Path.GetFileNameWithoutExtension(imgPath);
-            string imgPathDest = dirDest + subDirDest + "\\" + fileName + ".bmp";
+            string imgPathDest = string.Format("{0}{1}\\{2}.bmp", dirDest, subDirDest, fileName);
 
             // Create destination directory if it does not exist
             string imgDirDest = Path.GetDirectoryName(imgPathDest);
