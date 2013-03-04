@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace VB6ImageCreator
 {
@@ -89,8 +91,6 @@ namespace VB6ImageCreator
       /// <summary>
       /// Converts one image according to the given conversion parameters.
       /// </summary>
-      /// <remarks>ToDo: Speed this up by accessing the image data directly.
-      /// (see Bitmap.LockBits etc.)</remarks>
       /// <param name="img">The source image.</param>
       /// <param name="trnspThresh">Transparency threshold in percent.</param>
       /// <param name="colBack">Background color.</param>
@@ -103,36 +103,64 @@ namespace VB6ImageCreator
          System.Drawing.Color colTrnsp
       )
       {
-         Color c;
+         IntPtr ptr;
          double alpha;
+         BitmapData bmpData = null;
 
          double dblTrnspThresh = (double) trnspThresh / 100;
          var bmp = new Bitmap(img);
          int nWidth = img.Width;
          int nHeight = img.Height;
 
-         for (int j = 0; j < nHeight; ++j)
+         try
          {
-            for (int i = 0; i < nWidth; ++i)
-            {
-               c = bmp.GetPixel(i, j);
-               alpha = AlphaTable[c.A];
+            bmpData = bmp.LockBits(
+               new Rectangle(0, 0, nWidth, nHeight),
+               ImageLockMode.ReadWrite,
+               PixelFormat.Format32bppArgb
+            );
 
-               // Calculate new pixel color
-               if ((1.0 - alpha) >= dblTrnspThresh) c = colTrnsp;
-               else
+            ptr = bmpData.Scan0;
+            byte[] line = new byte[Math.Abs(bmpData.Stride)];
+
+            for (int j = 0; j < nHeight; ++j)
+            {
+               // Get managed copy of the current line
+               Marshal.Copy(ptr, line, 0, line.Length);
+
+               // Manipulate line
+               for (int i = 0; i < line.Length; i += 4)
                {
-                  c = System.Drawing.Color.FromArgb(
-                     0xFF,
-                     BlendChannel(alpha, c.R, colBack.R),
-                     BlendChannel(alpha, c.G, colBack.G),
-                     BlendChannel(alpha, c.B, colBack.B)
-                  );
+                  // Get alpha value of current pixel
+                  alpha = AlphaTable[line[i + 3]];
+
+                  // Calculate new pixel color
+                  if ((1.0 - alpha) >= dblTrnspThresh)
+                  {
+                     line[i] = colTrnsp.B;
+                     line[i + 1] = colTrnsp.G;
+                     line[i + 2] = colTrnsp.R;
+                  }
+                  else
+                  {
+                     line[i] = BlendChannel(alpha, line[i], colBack.B);
+                     line[i + 1] = BlendChannel(alpha, line[i + 1], colBack.G);
+                     line[i + 2] = BlendChannel(alpha, line[i + 2], colBack.R);
+                  }
+
+                  line[i + 3] = 0xFF;  // Alpha channel: always fully opaque
                }
 
-               // Replace pixel color
-               bmp.SetPixel(i, j, c);
+               // Write line
+               Marshal.Copy(line, 0, ptr, line.Length);
+
+               // Get next line
+               ptr = new IntPtr((long) ptr + bmpData.Stride);
             }
+         }
+         finally
+         {
+            if (bmpData != null) bmp.UnlockBits(bmpData);
          }
 
          return bmp;
