@@ -122,7 +122,7 @@
             Name="_txtColTrnsp"
             VerticalAlignment="Bottom"
             Width="71" 
-            Text="#FF00FF"
+            Text="#FFFFFF"
             TextChanged="TxtColTrnsp_TextChanged"
             />
         <Rectangle
