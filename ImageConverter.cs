@@ -81,8 +81,8 @@ namespace VB6ImageCreator
             if (!Directory.Exists(imgDirDest)) Directory.CreateDirectory(imgDirDest);
 
             var img = Image.FromFile(imgPath);
-            var imgDest = Convert(img, trnspThresh, sysDrwColBack, sysDrwColTrnsp);
-            imgDest.Save(imgPathDest, System.Drawing.Imaging.ImageFormat.Bmp);
+            var bmpDest = Convert(img, trnspThresh, sysDrwColBack, sysDrwColTrnsp);
+            bmpDest.Save(imgPathDest, System.Drawing.Imaging.ImageFormat.Bmp);
          });
 
          CountConverted = sourceImages.Count;
@@ -96,7 +96,7 @@ namespace VB6ImageCreator
       /// <param name="colBack">Background color.</param>
       /// <param name="colTrnsp">Transparent color.</param>
       /// <returns>The converted image.</returns>
-      private static Image Convert(
+      private static Bitmap Convert(
          Image img,
          int trnspThresh,
          System.Drawing.Color colBack, 
@@ -163,7 +163,8 @@ namespace VB6ImageCreator
             if (bmpData != null) bmp.UnlockBits(bmpData);
          }
 
-         return bmp;
+         var bmp24bpp = bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), PixelFormat.Format24bppRgb);
+         return bmp24bpp;
       }
 
       /// <summary>
