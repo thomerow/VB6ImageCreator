@@ -13,7 +13,7 @@ namespace VB6ImageCreator
    /// </summary>
    public partial class MainWindow : Window
    {
-      int _trnspThresh = 50;
+      int _trnspThresh;
       Color _colBack, _colTrnsp;
 
       public MainWindow()
@@ -25,7 +25,8 @@ namespace VB6ImageCreator
       {
          SetBackgroudColorRectBrush();
          SetTransparentColorRectBrush();
-         _lblPercent.Content = ((int)Math.Round(_sldTrnspThresh.Value)).ToString();
+         _trnspThresh = (int)Math.Round(_sldTrnspThresh.Value);
+         _lblPercent.Content = _trnspThresh.ToString();
 
          _txtSource.Text = Properties.Settings.Default.LastSourceDir;
          _txtDest.Text = Properties.Settings.Default.LastDestDir;
