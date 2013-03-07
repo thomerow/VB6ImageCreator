@@ -131,8 +131,10 @@ namespace VB6ImageCreator
                // Manipulate line
                for (int i = 0; i < line.Length; i += 4)
                {
-                  // Get alpha value of current pixel
-                  alpha = AlphaTable[line[i + 3]];
+                  // Get alpha value of current pixel.
+                  // Add 0.5 to byte alpha value to 
+                  // make rounding uneccessary below.
+                  alpha = AlphaTable[line[i + 3]] + (0.5 / 0xFF); 
 
                   // Calculate new pixel color
                   if ((1.0 - alpha) >= dblTrnspThresh)
@@ -143,9 +145,9 @@ namespace VB6ImageCreator
                   }
                   else if (alpha < 1.0)
                   {
-                     line[i] = BlendChannel(alpha, line[i], colBack.B);
-                     line[i + 1] = BlendChannel(alpha, line[i + 1], colBack.G);
-                     line[i + 2] = BlendChannel(alpha, line[i + 2], colBack.R);
+                     line[i] = (byte) ((alpha * line[i]) + ((1.0 - alpha) * colBack.B));
+                     line[i + 1] = (byte) ((alpha * line[i + 1]) + ((1.0 - alpha) * colBack.G));
+                     line[i + 2] = (byte) ((alpha * line[i + 2]) + ((1.0 - alpha) * colBack.R));
                   }
 
                   line[i + 3] = 0xFF;  // Alpha channel: always fully opaque
@@ -165,19 +167,6 @@ namespace VB6ImageCreator
 
          var bmp24bpp = bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), PixelFormat.Format24bppRgb);
          return bmp24bpp;
-      }
-
-      /// <summary>
-      /// Blends a foreground color and a background color according to a given
-      /// alpha value.
-      /// </summary>
-      /// <param name="alpha">Alpha value (0.0 - 1.0)</param>
-      /// <param name="chnFG">Foreground color channel value (0 - 255)</param>
-      /// <param name="chnBG">Background channel value (0 - 255)</param>
-      /// <returns>Combined color channel value.</returns>
-      private static byte BlendChannel(double alpha, byte chnFG, byte chnBG)
-      {
-         return (byte) Math.Round((alpha * chnFG) + ((1.0 - alpha) * chnBG));
       }
 
       private static System.Drawing.Color FromWindowsMediaColor(System.Windows.Media.Color color)
