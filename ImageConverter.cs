@@ -106,7 +106,7 @@ namespace VB6ImageCreator
       {
          IntPtr ptr;
          double alpha;
-         double opacity;
+         double transparency;
          BitmapData bmpData = null;
 
          double dblTrnspThresh = (double) trnspThresh / 100;
@@ -135,10 +135,10 @@ namespace VB6ImageCreator
                {
                   // Get alpha and opacity value of current pixel.
                   alpha = AlphaTable[line[i + 3]];
-                  opacity = 1.0 - alpha;
+                  transparency = 1.0 - alpha;
 
                   // Calculate new pixel color
-                  if (opacity >= dblTrnspThresh)
+                  if (transparency >= dblTrnspThresh)
                   {
                      line[i] = colTrnsp.B;
                      line[i + 1] = colTrnsp.G;
@@ -147,9 +147,9 @@ namespace VB6ImageCreator
                   else if (alpha < 1.0)
                   {                     
                      // Adding (0.5 / 0xFF) makes rounding unnecessary
-                     line[i] = (byte) (((alpha * line[i]) + (opacity * colBack.B)) + (0.5 / 0xFF));
-                     line[i + 1] = (byte) (((alpha * line[i + 1]) + (opacity * colBack.G)) + (0.5 / 0xFF));
-                     line[i + 2] = (byte) (((alpha * line[i + 2]) + (opacity * colBack.R)) + (0.5 / 0xFF));
+                     line[i] = (byte) (((alpha * line[i]) + (transparency * colBack.B)) + (0.5 / 0xFF));
+                     line[i + 1] = (byte) (((alpha * line[i + 1]) + (transparency * colBack.G)) + (0.5 / 0xFF));
+                     line[i + 2] = (byte) (((alpha * line[i + 2]) + (transparency * colBack.R)) + (0.5 / 0xFF));
                   }
 
                   line[i + 3] = 0xFF;  // Alpha channel: always fully opaque
