@@ -80,6 +80,7 @@ namespace VB6ImageCreator
             string imgDirDest = Path.GetDirectoryName(imgPathDest);
             if (!Directory.Exists(imgDirDest)) Directory.CreateDirectory(imgDirDest);
 
+            // Load, convert and save image
             var img = Image.FromFile(imgPath);
             var bmpDest = Convert(img, trnspThresh, sysDrwColBack, sysDrwColTrnsp);
             bmpDest.Save(imgPathDest, System.Drawing.Imaging.ImageFormat.Bmp);
