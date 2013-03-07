@@ -132,9 +132,7 @@ namespace VB6ImageCreator
                // Manipulate line
                for (int i = 0; i < line.Length; i += 4)
                {
-                  // Get alpha value of current pixel.
-                  // Add 0.5 to byte alpha value to 
-                  // make rounding uneccessary below.
+                  // Get alpha and opacity value of current pixel.
                   alpha = AlphaTable[line[i + 3]];
                   opacity = 1.0 - alpha;
 
@@ -147,6 +145,7 @@ namespace VB6ImageCreator
                   }
                   else if (alpha < 1.0)
                   {                     
+                     // Adding (0.5 / 0xFF) makes rounding unneccessary
                      line[i] = (byte) (((alpha * line[i]) + (opacity * colBack.B)) + (0.5 / 0xFF));
                      line[i + 1] = (byte) (((alpha * line[i + 1]) + (opacity * colBack.G)) + (0.5 / 0xFF));
                      line[i + 2] = (byte) (((alpha * line[i + 2]) + (opacity * colBack.R)) + (0.5 / 0xFF));
