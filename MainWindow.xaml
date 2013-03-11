@@ -67,7 +67,7 @@
             Maximum="100"
             SmallChange="1"
             LargeChange="10"
-            Value="70"
+            Value="75"
             ValueChanged="SldTrnspThresh_ValueChanged"
             >
             <Slider.ToolTip>
