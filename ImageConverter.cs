@@ -146,10 +146,10 @@ namespace VB6ImageCreator
                   }
                   else if (alpha < 1.0)
                   {                     
-                     // Adding (0.5 / 0xFF) makes rounding unnecessary
-                     line[i] = (byte) (((alpha * line[i]) + (transparency * colBack.B)) + (0.5 / 0xFF));
-                     line[i + 1] = (byte) (((alpha * line[i + 1]) + (transparency * colBack.G)) + (0.5 / 0xFF));
-                     line[i + 2] = (byte) (((alpha * line[i + 2]) + (transparency * colBack.R)) + (0.5 / 0xFF));
+                     // Adding 0.5 makes rounding unnecessary
+                     line[i] = (byte) (((alpha * line[i]) + (transparency * colBack.B)) + 0.5);
+                     line[i + 1] = (byte) (((alpha * line[i + 1]) + (transparency * colBack.G)) + 0.5);
+                     line[i + 2] = (byte) (((alpha * line[i + 2]) + (transparency * colBack.R)) + 0.5);
                   }
 
                   line[i + 3] = 0xFF;  // Alpha channel: always fully opaque
