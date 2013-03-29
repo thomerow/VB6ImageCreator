@@ -133,7 +133,7 @@ namespace VB6ImageCreator
                // Manipulate line
                for (int i = 0; i < line.Length; i += 4)
                {
-                  // Get alpha and opacity value of current pixel.
+                  // Get opacity and transparency value of current pixel.
                   alpha = AlphaTable[line[i + 3]];
                   transparency = 1.0 - alpha;
 
