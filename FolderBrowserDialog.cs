@@ -90,10 +90,10 @@ namespace VB6ImageCreator
                }
             case BFFM_SELCHANGED:
                {
-                  IntPtr pathPtr = Marshal.AllocHGlobal((int)(260 * Marshal.SystemDefaultCharSize));
+                  IntPtr pathPtr = Marshal.AllocHGlobal((int)(1024 * Marshal.SystemDefaultCharSize));
                   if (SHGetPathFromIDList(lp, pathPtr))
                   {
-                     SendMessage(new HandleRef(null, hWnd), (uint) BFFM_SETSTATUSTEXTW, (long) 0, pathPtr);
+                     SendMessage(new HandleRef(null, hWnd), BFFM_SETSTATUSTEXTW, 0, pathPtr);
                   }
                   Marshal.FreeHGlobal(pathPtr);
                   break;
@@ -106,10 +106,11 @@ namespace VB6ImageCreator
       public static string SelectFolder(string caption, string initialPath, IntPtr parentHandle)
       {
          _initialPath = initialPath;
-         StringBuilder sb = new StringBuilder(256);
-         IntPtr bufferAddress = Marshal.AllocHGlobal(256); ;
+         StringBuilder sb = new StringBuilder(1024);
+         IntPtr bufferAddress = Marshal.AllocHGlobal(1024); ;
          IntPtr pidl = IntPtr.Zero;
          BROWSEINFO bi = new BROWSEINFO();
+
          bi.hwndOwner = parentHandle;
          bi.pidlRoot = IntPtr.Zero;
          bi.pszDisplayName = initialPath;
@@ -132,9 +133,9 @@ namespace VB6ImageCreator
          {
             // Caller is responsible for freeing this memory.
             Marshal.FreeCoTaskMem(pidl);
-            Marshal.FreeHGlobal(bufferAddress);
          }
 
+         Marshal.FreeHGlobal(bufferAddress);
          return sb.ToString();
       }
    }
