@@ -10,4 +10,4 @@ But why?!
 
 I needed new toolbar icons for an old VB6 project. VB6 toolbars are supplied with icons by an `ImageList` control which unfortunately only allows 24 bit images. It is possible to define one color which is treated as fully transparent, though.
 
-Because I already had a large icon collection which solely consists of 32 bit argb PNG images I came up with this little program to have a possibility to convert those existing images automatically.
+Because I already had a large icon collection which solely consists of 32 bit RGBA PNG images I came up with this little program to have a possibility to convert those existing images automatically.
