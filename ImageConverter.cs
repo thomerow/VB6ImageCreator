@@ -36,7 +36,7 @@ namespace VB6ImageCreator {
       /// <param name="colTrnsp">Color of fully transparent pixels.</param>
       /// <param name="dirSource">Source directory.</param>
       /// <param name="dirDest">Destination directory.</param>
-      internal static void Convert(
+      internal async static Task Convert(
          int trnspThresh,
          System.Windows.Media.Color colBack,
          System.Windows.Media.Color colTrnsp,
@@ -56,7 +56,7 @@ namespace VB6ImageCreator {
          // Get list of all file paths inside the source directory
          var sourceImages = Directory.EnumerateFiles(dirSource, "*.png", SearchOption.AllDirectories).ToList();
 
-         Parallel.ForEach(sourceImages, imgPath => {
+         await Task.Run(() => Parallel.ForEach(sourceImages, imgPath => {
             string imgDir = Path.GetDirectoryName(imgPath);
             string subDirDest = imgDir.Substring(dirSource.Length);
             string fileName = Path.GetFileNameWithoutExtension(imgPath);
@@ -70,7 +70,7 @@ namespace VB6ImageCreator {
             var img = Image.FromFile(imgPath);
             var bmpDest = Convert(img, trnspThresh, sysDrwColBack, sysDrwColTrnsp);
             bmpDest.Save(imgPathDest, ImageFormat.Bmp);
-         });
+         }));
 
          CountConverted = sourceImages.Count;
       }

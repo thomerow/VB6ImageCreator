@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -65,11 +66,11 @@ namespace VB6ImageCreator {
 			_lblPercent.Content = _trnspThresh.ToString();
 		}
 
-		private void BtnConvert_Click(object sender, RoutedEventArgs e) {
-			Convert();
+		private async void BtnConvert_Click(object sender, RoutedEventArgs e) {
+			await Convert();
 		}
 
-		private void Convert() {
+		private async Task Convert() {
 			if ((_txtSource.Text == string.Empty) || (_txtDest.Text == string.Empty)) {
 				MessageBox.Show("Select a source and a target directory first.");
 				return;
@@ -80,8 +81,8 @@ namespace VB6ImageCreator {
 			IsEnabled = false;
 
 			try {
-				ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
-				MessageBox.Show($"Converted {ImageConverter.CountConverted} images.");
+				await ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
+				MessageBox.Show(this, $"Converted {ImageConverter.CountConverted} images.", "Successs", MessageBoxButton.OK, MessageBoxImage.Information);
 			}
 			catch (Exception exc) {
 				MessageBox.Show(exc.Message, "Oops", MessageBoxButton.OK, MessageBoxImage.Error);
