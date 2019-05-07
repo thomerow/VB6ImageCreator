@@ -102,7 +102,7 @@
                <StackPanel>
                   <TextBlock>
                      <Bold>Background Color</Bold><LineBreak />
-                     This color is used as a background color for semi transparent pixels.
+                     This color is used as the background color for semi transparent pixels.
                   </TextBlock>
                </StackPanel>
             </ToolTip>
