@@ -104,7 +104,7 @@
             Name="_txtColBck"
             VerticalAlignment="Bottom"
             Width="71"
-            Text="#D6D3CE"
+            Text="#F0F0F0"
             TextChanged="TxtColBck_TextChanged" 
             />
         <Label

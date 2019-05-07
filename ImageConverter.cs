@@ -7,36 +7,23 @@ using System.Threading.Tasks;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace VB6ImageCreator
-{
-   static class ImageConverter
-   {
+namespace VB6ImageCreator {
+
+   static class ImageConverter {
+
       private static readonly double[] AlphaTable;
 
-      static ImageConverter()
-      {
+      static ImageConverter() {
          CountConverted = 0;
 
          // Calculate alpha table
          AlphaTable = new double[0x100];
-         for (int i = 0; i < 0x100; ++i)
-         {
+         for (int i = 0; i < 0x100; ++i) {
             AlphaTable[i] = (double) i / 0xFF;
          }
       }
 
       public static int CountConverted { get; private set; }
-
-      internal static void ConvertAsync(
-         int trnspThresh, 
-         System.Windows.Media.Color colBack, 
-         System.Windows.Media.Color colTrnsp, 
-         string dirSource, 
-         string dirDest
-      )
-      {
-         ThreadPool.QueueUserWorkItem(p => Convert(trnspThresh, colBack, colTrnsp, dirSource, dirDest));
-      }
 
       /// <summary>
       /// Converts all png images in a source directory to 24 bit bmp images 
@@ -50,13 +37,13 @@ namespace VB6ImageCreator
       /// <param name="dirSource">Source directory.</param>
       /// <param name="dirDest">Destination directory.</param>
       internal static void Convert(
-         int trnspThresh, 
-         System.Windows.Media.Color colBack, 
-         System.Windows.Media.Color colTrnsp, 
-         string dirSource, 
+         int trnspThresh,
+         System.Windows.Media.Color colBack,
+         System.Windows.Media.Color colTrnsp,
+         string dirSource,
          string dirDest
-      )
-      {
+      ) {
+
          CountConverted = 0;
 
          // Convert WPF colors to System.Drawing.Color
@@ -69,12 +56,11 @@ namespace VB6ImageCreator
          // Get list of all file paths inside the source directory
          var sourceImages = Directory.EnumerateFiles(dirSource, "*.png", SearchOption.AllDirectories).ToList();
 
-         Parallel.ForEach(sourceImages, imgPath =>
-         {
+         Parallel.ForEach(sourceImages, imgPath => {
             string imgDir = Path.GetDirectoryName(imgPath);
             string subDirDest = imgDir.Substring(dirSource.Length);
             string fileName = Path.GetFileNameWithoutExtension(imgPath);
-            string imgPathDest = string.Format("{0}{1}\\{2}.bmp", dirDest, subDirDest, fileName);
+            string imgPathDest = $"{dirDest}{subDirDest}\\{fileName}.bmp";
 
             // Create destination directory if it does not exist
             string imgDirDest = Path.GetDirectoryName(imgPathDest);
@@ -83,7 +69,7 @@ namespace VB6ImageCreator
             // Load, convert and save image
             var img = Image.FromFile(imgPath);
             var bmpDest = Convert(img, trnspThresh, sysDrwColBack, sysDrwColTrnsp);
-            bmpDest.Save(imgPathDest, System.Drawing.Imaging.ImageFormat.Bmp);
+            bmpDest.Save(imgPathDest, ImageFormat.Bmp);
          });
 
          CountConverted = sourceImages.Count;
@@ -97,13 +83,7 @@ namespace VB6ImageCreator
       /// <param name="colBack">Background color.</param>
       /// <param name="colTrnsp">Transparent color.</param>
       /// <returns>The converted image.</returns>
-      private static Bitmap Convert(
-         Image img,
-         int trnspThresh,
-         System.Drawing.Color colBack, 
-         System.Drawing.Color colTrnsp
-      )
-      {
+      private static Bitmap Convert(Image img, int trnspThresh, Color colBack, Color colTrnsp) {
          IntPtr ptr;
          double alpha;
          double transparency;
@@ -114,8 +94,7 @@ namespace VB6ImageCreator
          int nWidth = img.Width;
          int nHeight = img.Height;
 
-         try
-         {
+         try {
             bmpData = bmp.LockBits(
                new Rectangle(0, 0, nWidth, nHeight),
                ImageLockMode.ReadWrite,
@@ -125,28 +104,25 @@ namespace VB6ImageCreator
             ptr = bmpData.Scan0;
             byte[] line = new byte[Math.Abs(bmpData.Stride)];
 
-            for (int j = 0; j < nHeight; ++j)
-            {
+            for (int j = 0; j < nHeight; ++j) {
                // Get managed copy of the current line
                Marshal.Copy(ptr, line, 0, line.Length);
 
                // Manipulate line
-               for (int i = 0; i < line.Length; i += 4)
-               {
+               for (int i = 0; i < line.Length; i += 4) {
                   // Get opacity and transparency value of current pixel.
                   alpha = AlphaTable[line[i + 3]];
                   transparency = 1.0 - alpha;
 
                   // Calculate new pixel color
-                  if (transparency >= dblTrnspThresh)
-                  {
+                  if (transparency >= dblTrnspThresh) {
                      line[i] = colTrnsp.B;
                      line[i + 1] = colTrnsp.G;
                      line[i + 2] = colTrnsp.R;
                   }
-                  else if (alpha < 1.0)
-                  {                     
-                     // Adding 0.5 makes rounding unnecessary
+                  else if (alpha < 1.0) {
+                     // Adding 0.5 makes rounding unnecessary when casting floating 
+                     // point values to bytes
                      line[i] = (byte) (((alpha * line[i]) + (transparency * colBack.B)) + 0.5);
                      line[i + 1] = (byte) (((alpha * line[i + 1]) + (transparency * colBack.G)) + 0.5);
                      line[i + 2] = (byte) (((alpha * line[i + 2]) + (transparency * colBack.R)) + 0.5);
@@ -162,8 +138,7 @@ namespace VB6ImageCreator
                ptr = new IntPtr((long) ptr + bmpData.Stride);
             }
          }
-         finally
-         {
+         finally {
             if (bmpData != null) bmp.UnlockBits(bmpData);
          }
 
@@ -171,9 +146,8 @@ namespace VB6ImageCreator
          return bmp24bpp;
       }
 
-      private static System.Drawing.Color FromWindowsMediaColor(System.Windows.Media.Color color)
-      {
-         return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+      private static Color FromWindowsMediaColor(System.Windows.Media.Color color) {
+         return Color.FromArgb(color.A, color.R, color.G, color.B);
       }
    }
 }
