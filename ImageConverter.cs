@@ -46,8 +46,8 @@ namespace VB6ImageCreator {
          CountConverted = 0;
 
          // Convert WPF colors to System.Drawing.Color
-         var sysDrwColBack = FromWindowsMediaColor(colBack);
-         var sysDrwColTrnsp = FromWindowsMediaColor(colTrnsp);
+         Color sysDrwColBack = FromWindowsMediaColor(colBack);
+         Color sysDrwColTrnsp = FromWindowsMediaColor(colTrnsp);
 
          // Remove rightmost slash from destination directory
          if (dirDest.EndsWith("\\")) dirDest = dirDest.Substring(0, dirDest.Length - 1);
@@ -88,7 +88,7 @@ namespace VB6ImageCreator {
          double transparency;
          BitmapData bmpData = null;
 
-         double dblTrnspThresh = (double) trnspThresh / 100;
+         double fTrnspThresh = (double) trnspThresh / 100;
          var bmp = new Bitmap(img);
          int nWidth = img.Width;
          int nHeight = img.Height;
@@ -114,7 +114,7 @@ namespace VB6ImageCreator {
                   transparency = 1.0 - alpha;
 
                   // Calculate new pixel color
-                  if (transparency >= dblTrnspThresh) {
+                  if (transparency >= fTrnspThresh) {
                      line[i] = colTrnsp.B;
                      line[i + 1] = colTrnsp.G;
                      line[i + 2] = colTrnsp.R;
@@ -122,9 +122,9 @@ namespace VB6ImageCreator {
                   else if (alpha < 1.0) {
                      // Adding 0.5 makes rounding unnecessary when casting floating 
                      // point values to bytes
-                     line[i] = (byte) (((alpha * line[i]) + (transparency * colBack.B)) + 0.5);
-                     line[i + 1] = (byte) (((alpha * line[i + 1]) + (transparency * colBack.G)) + 0.5);
-                     line[i + 2] = (byte) (((alpha * line[i + 2]) + (transparency * colBack.R)) + 0.5);
+                     line[i] = (byte) ((alpha * line[i]) + (transparency * colBack.B) + 0.5);
+                     line[i + 1] = (byte) ((alpha * line[i + 1]) + (transparency * colBack.G) + 0.5);
+                     line[i + 2] = (byte) ((alpha * line[i + 2]) + (transparency * colBack.R) + 0.5);
                   }
 
                   line[i + 3] = 0xFF;  // Alpha channel: always fully opaque

@@ -25,7 +25,7 @@
          Height="23"
          HorizontalAlignment="Stretch"
          Margin="12,12,12,0"
-         Name="_txtSource"
+         Name="m_txtSource"
          IsReadOnly="True"
          VerticalAlignment="Top" />
       <Button
@@ -33,14 +33,14 @@
          Height="23"
          HorizontalAlignment="Right"
          Margin="0,41,15,0"
-         Name="_btnSelSource"
+         Name="m_btnSelSource"
          VerticalAlignment="Top"
          Click="BtnSelSource_Click" />
       <TextBox
          Height="23"
          HorizontalAlignment="Stretch"
          Margin="12,79,15,0"
-         Name="_txtDest"
+         Name="m_txtDest"
          IsReadOnly="True"
          VerticalAlignment="Top" />
       <Button
@@ -48,14 +48,14 @@
          Height="23"
          HorizontalAlignment="Right"
          Margin="0,108,15,0"
-         Name="_btnSelTgt"
+         Name="m_btnSelTgt"
          VerticalAlignment="Top"
          Click="BtnSelTgt_Click" />
       <Slider
          Height="23"
          HorizontalAlignment="Left"
          Margin="153,158,0,0"
-         Name="_sldTrnspThresh"
+         Name="m_sldTrnspThresh"
          VerticalAlignment="Top"
          Width="180"
          Maximum="100"
@@ -92,7 +92,7 @@
          Height="23"
          HorizontalAlignment="Left"
          Margin="156,0,0,98"
-         Name="_txtColBck"
+         Name="m_txtColBck"
          VerticalAlignment="Bottom"
          Width="71"
          Text="#F0F0F0"
@@ -119,7 +119,7 @@
          Height="23"
          HorizontalAlignment="Left"
          Margin="156,0,0,50"
-         Name="_txtColTrnsp"
+         Name="m_txtColTrnsp"
          VerticalAlignment="Bottom"
          Width="71"
          Text="#FF00FF"
@@ -138,7 +138,7 @@
       <Rectangle
          HorizontalAlignment="Left"
          Margin="247,0,0,98"
-         Name="_rectColBack"
+         Name="m_rectColBack"
          Stroke="Black"
          Width="72"
          Height="26"
@@ -147,14 +147,14 @@
          Height="26"
          HorizontalAlignment="Left"
          Margin="247,0,0,50"
-         Name="_rectColTransp"
+         Name="m_rectColTransp"
          Stroke="Black"
          VerticalAlignment="Bottom"
          Width="72" />
       <Label
          Content="0"
          Margin="325,153,0,0"
-         Name="_lblPercent"
+         Name="m_lblPercent"
          HorizontalContentAlignment="Right"
          Height="28"
          VerticalAlignment="Top"
@@ -173,7 +173,7 @@
          Height="23"
          HorizontalAlignment="Right"
          Margin="0,0,12,12"
-         Name="_btnExit"
+         Name="m_btnExit"
          VerticalAlignment="Bottom"
          Width="75"
          Click="BtnExit_Click" />

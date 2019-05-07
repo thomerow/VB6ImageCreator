@@ -14,8 +14,8 @@ namespace VB6ImageCreator {
 	/// </summary>
 	public partial class MainWindow : Window {
 
-		int _trnspThresh;
-		Color _colBack, _colTrnsp;
+		int m_trnspThresh;
+		Color m_colBack, m_colTrnsp;
 
 		public MainWindow() {
 			InitializeComponent();
@@ -24,25 +24,25 @@ namespace VB6ImageCreator {
 		private void Window_Loaded(object sender, RoutedEventArgs e) {
 			SetBackgroudColorRectBrush();
 			SetTransparentColorRectBrush();
-			_trnspThresh = (int) Math.Round(_sldTrnspThresh.Value);
-			_lblPercent.Content = _trnspThresh.ToString();
+			m_trnspThresh = (int) Math.Round(m_sldTrnspThresh.Value);
+			m_lblPercent.Content = m_trnspThresh.ToString();
 
-			_txtSource.Text = Properties.Settings.Default.LastSourceDir;
-			_txtDest.Text = Properties.Settings.Default.LastDestDir;
+			m_txtSource.Text = Properties.Settings.Default.LastSourceDir;
+			m_txtDest.Text = Properties.Settings.Default.LastDestDir;
 		}
 
 		private void SetBackgroudColorRectBrush() {
-			if (_rectColBack == null) return;
+			if (m_rectColBack == null) return;
 
-			FillRect(_rectColBack, _txtColBck.Text);
-			_colBack = ((SolidColorBrush) _rectColBack.Fill).Color;
+			FillRect(m_rectColBack, m_txtColBck.Text);
+			m_colBack = ((SolidColorBrush) m_rectColBack.Fill).Color;
 		}
 
 		private void SetTransparentColorRectBrush() {
-			if (_rectColTransp == null) return;
+			if (m_rectColTransp == null) return;
 
-			FillRect(_rectColTransp, _txtColTrnsp.Text);
-			_colTrnsp = ((SolidColorBrush) _rectColTransp.Fill).Color;
+			FillRect(m_rectColTransp, m_txtColTrnsp.Text);
+			m_colTrnsp = ((SolidColorBrush) m_rectColTransp.Fill).Color;
 		}
 
 		private void FillRect(Rectangle rect, string colHex) {
@@ -61,9 +61,9 @@ namespace VB6ImageCreator {
 		}
 
 		private void SldTrnspThresh_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-			if (_lblPercent == null) return;
-			_trnspThresh = ((int) Math.Round(e.NewValue));
-			_lblPercent.Content = _trnspThresh.ToString();
+			if (m_lblPercent == null) return;
+			m_trnspThresh = ((int) Math.Round(e.NewValue));
+			m_lblPercent.Content = m_trnspThresh.ToString();
 		}
 
 		private async void BtnConvert_Click(object sender, RoutedEventArgs e) {
@@ -71,7 +71,7 @@ namespace VB6ImageCreator {
 		}
 
 		private async Task Convert() {
-			if ((_txtSource.Text == string.Empty) || (_txtDest.Text == string.Empty)) {
+			if ((m_txtSource.Text == string.Empty) || (m_txtDest.Text == string.Empty)) {
 				MessageBox.Show("Select a source and a target directory first.");
 				return;
 			}
@@ -81,7 +81,7 @@ namespace VB6ImageCreator {
 			IsEnabled = false;
 
 			try {
-				await ImageConverter.Convert(_trnspThresh, _colBack, _colTrnsp, _txtSource.Text, _txtDest.Text);
+				await ImageConverter.Convert(m_trnspThresh, m_colBack, m_colTrnsp, m_txtSource.Text, m_txtDest.Text);
 				MessageBox.Show(this, $"Converted {ImageConverter.CountConverted} images.", "Successs", MessageBoxButton.OK, MessageBoxImage.Information);
 			}
 			catch (Exception exc) {
@@ -94,22 +94,22 @@ namespace VB6ImageCreator {
 		}
 
 		private void BtnSelSource_Click(object sender, RoutedEventArgs e) {
-			var lastSourceDir = Properties.Settings.Default.LastSourceDir;
-			var srcDir = Win32.FolderBrowserDialog.SelectFolder("Select Source Directory", lastSourceDir, new WindowInteropHelper(this).Handle);
+			string lastSourceDir = Properties.Settings.Default.LastSourceDir;
+			string dirSrc = Win32.FolderBrowserDialog.SelectFolder("Select Source Directory", lastSourceDir, new WindowInteropHelper(this).Handle);
 
-			if ((srcDir != null) && (srcDir != string.Empty)) {
-				_txtSource.Text = srcDir;
-				Properties.Settings.Default.LastSourceDir = srcDir;
+			if ((dirSrc != null) && (dirSrc != string.Empty)) {
+				m_txtSource.Text = dirSrc;
+				Properties.Settings.Default.LastSourceDir = dirSrc;
 			}
 		}
 
 		private void BtnSelTgt_Click(object sender, RoutedEventArgs e) {
-			var lastDestDir = Properties.Settings.Default.LastDestDir;
-			var destDir = Win32.FolderBrowserDialog.SelectFolder("Select Target Directory", lastDestDir, new WindowInteropHelper(this).Handle);
+			string lastDestDir = Properties.Settings.Default.LastDestDir;
+			string dirDest = Win32.FolderBrowserDialog.SelectFolder("Select Target Directory", lastDestDir, new WindowInteropHelper(this).Handle);
 
-			if ((destDir != null) && (destDir != string.Empty)) {
-				_txtDest.Text = destDir;
-				Properties.Settings.Default.LastDestDir = destDir;
+			if ((dirDest != null) && (dirDest != string.Empty)) {
+				m_txtDest.Text = dirDest;
+				Properties.Settings.Default.LastDestDir = dirDest;
 			}
 		}
 
